@@ -1,6 +1,7 @@
 from ib_insync import *
 import pandas as pd
 import datetime
+import sys
 
 ib = IB()
 ib.connect('127.0.0.1', 7496, clientId=1)
@@ -15,13 +16,14 @@ while start_date.weekday() != 4:  # 4 corresponds to Friday
 
 # Initialize an empty list to store week/price pairs
 weekly_prices = []
-week_index = 1
+week_index = 0
 # Retrieve prices for 7 days from the initial date
-for i in range(7):
+strike = 36
+for i in range(9):
     date = start_date + datetime.timedelta(days=i*7)
-
+    week_index += 1
     # TICKER - year, month, day - strike - P or C - exchange
-    contract = Option('TQQQ', date.strftime('%Y%m%d'), 30, 'P', 'SMART')
+    contract = Option('TQQQ', date.strftime('%Y%m%d'), strike, 'P', 'SMART')
 
     # Fetch historical bid prices
     bars = ib.reqHistoricalData(
@@ -38,9 +40,10 @@ for i in range(7):
 
         # Append week/price pair to the list
         weekly_prices.append({'Week': week_index, 'Price': last_price, "Price / Week": round(last_price / week_index,3)})
-        week_index += 1
+        
 # Create a DataFrame from the list
 df_weekly_prices = pd.DataFrame(weekly_prices)
 
 # Print the dataframe
 print(df_weekly_prices)
+df_weekly_prices.to_csv(sys.stdout, index=False)
