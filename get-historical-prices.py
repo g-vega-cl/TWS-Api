@@ -35,7 +35,7 @@ for i in range(7):
         last_price = df['close'].iloc[-1]
 
         # Append week/price pair to the list
-        weekly_prices.append({'Week': week_index, 'Price': last_price})
+        weekly_prices.append({'Week': week_index, 'Price': last_price, "Price / Week": round(last_price / week_index,3)})
         week_index += 1
 # Create a DataFrame from the list
 df_weekly_prices = pd.DataFrame(weekly_prices)
