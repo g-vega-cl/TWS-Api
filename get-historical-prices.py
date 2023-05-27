@@ -4,8 +4,14 @@ from ib_insync import *
 ib = IB()
 ib.connect('127.0.0.1', 7496, clientId=1)
 
+year = "2023"
+month = "6".zfill(2)
+day = "2".zfill(2)
+
+date = year + month + day
+
 # TICKER - year, month, day - strike - P or C - exchange
-contract = Option('TQQQ', '20230602', 30, 'P', 'SMART')
+contract = Option('TQQQ', date, 30, 'P', 'SMART')
 
 # Fetching historical bid prices
 bars = ib.reqHistoricalData(
