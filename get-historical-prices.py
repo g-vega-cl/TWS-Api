@@ -6,10 +6,12 @@ ib = IB()
 ib.connect('127.0.0.1', 7496, clientId=1)
 
 # Specify the initial date
-year = 2023
-month = 6
-day = 2
-start_date = datetime.date(year, month, day)
+# Get today's date
+start_date = datetime.datetime.now().date()
+
+# Find the last Friday before the specified date
+while start_date.weekday() != 4:  # 4 corresponds to Friday
+    start_date += datetime.timedelta(days=1)
 
 # Initialize an empty list to store week/price pairs
 weekly_prices = []
