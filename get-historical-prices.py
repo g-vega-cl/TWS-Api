@@ -23,32 +23,20 @@ current_prices = {
     "ARKK": 43,
 }
 
-strike_3_percent = {
-    "TQQQ":  math.floor(current_prices["TQQQ"] * 0.97),
-    "PLTR":  math.floor(current_prices["PLTR"] * 0.97),
-    "SOXL":  math.floor(current_prices["SOXL"] * 0.97),
-    "EEM":  math.floor(current_prices["EEM"] * 0.97),
-    "IWM":  math.floor(current_prices["IWM"] * 0.97),
-    "ARKK":  math.floor(current_prices["ARKK"] * 0.97),
-}
+def calculate_strike_percent(percent, current_prices):
+    strike_percent = {}
+    for key, value in current_prices.items():
+        strike_percent[key] = math.floor(value * percent)
+    return strike_percent
 
-strike_5_percent = {
-    "TQQQ":  math.floor(current_prices["TQQQ"] * 0.95),
-    "PLTR":  math.floor(current_prices["PLTR"] * 0.95),
-    "SOXL":  math.floor(current_prices["SOXL"] * 0.95),
-    "EEM":  math.floor(current_prices["EEM"] * 0.95),
-    "IWM":  math.floor(current_prices["IWM"] * 0.95),
-    "ARKK":  math.floor(current_prices["ARKK"] * 0.95),
-}
+strike_3_percent = calculate_strike_percent(0.97, current_prices)
+print(strike_3_percent)
 
-strike_9_percent = {
-    "TQQQ":  math.floor(current_prices["TQQQ"] * 0.91),
-    "PLTR":  math.floor(current_prices["PLTR"] * 0.91),
-    "SOXL":  math.floor(current_prices["SOXL"] * 0.91),
-    "EEM":  math.floor(current_prices["EEM"] * 0.91),
-    "IWM":  math.floor(current_prices["IWM"] * 0.91),
-    "ARKK":  math.floor(current_prices["ARKK"] * 0.91),
-}
+strike_5_percent = calculate_strike_percent(.95, current_prices)
+print(strike_5_percent)
+
+strike_9_percent = calculate_strike_percent(.91, current_prices)
+print(strike_9_percent)
 
 
 ib = IB()
