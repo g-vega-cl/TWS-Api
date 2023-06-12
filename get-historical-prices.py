@@ -60,31 +60,32 @@ while start_date.weekday() != 4:  # 4 corresponds to Friday
 comission = 0.015
 max_weekly_gains = []
 
+
 for ticker in maintainanance_margin_dict.keys():
-    weekly_prices = []
-    week_index = 0
-    strike = current_prices[ticker]
-    for week_number in range(9):
-        date = start_date + datetime.timedelta(days=week_number*7)
-        week_index += 1
-        contract = Option(ticker, date.strftime('%Y%m%d'), strike, 'P', 'SMART')
+    for strike_percent in [current_prices, strike_3_percent, strike_5_percent, strike_9_percent]:
+        weekly_prices = []
+        week_index = 0
+        strike = strike_percent[ticker]
+        for week_number in range(9):
+            date = start_date + datetime.timedelta(days=week_number*7)
+            week_index += 1
+            contract = Option(ticker, date.strftime('%Y%m%d'), strike, 'P', 'SMART')
 
-        maintainanance_margin = maintainanance_margin_dict[ticker]
-        max_orders = math.floor(excess_liquidity/maintainanance_margin)
+            maintainanance_margin = maintainanance_margin_dict[ticker]
+            max_orders = math.floor(excess_liquidity/maintainanance_margin)
 
-        bars = ib.reqHistoricalData(
-            contract, endDateTime='', durationStr='1 D',
-            barSizeSetting='1 hour', whatToShow='BID', useRTH=True)
+            bars = ib.reqHistoricalData(
+                contract, endDateTime='', durationStr='1 D',
+                barSizeSetting='1 hour', whatToShow='BID', useRTH=True)
 
-        if bars is not None and len(bars):
-            df = util.df(bars)
-            last_price = df['close'].iloc[-1]
-            last_max_weekly_gain = max_orders * (last_price - comission) / week_index * 100
-            weekly_prices.append({'Week': week_index, 'Price': last_price})
-            max_weekly_gains.append({'Ticker': ticker, 'Week': week_index, 'Price': last_price, "Price / Week": round(last_price / week_index,3), "Max Weekly Gain": round(last_max_weekly_gain,3)})
+            if bars is not None and len(bars):
+                df = util.df(bars)
+                last_price = df['close'].iloc[-1]
+                last_max_weekly_gain = max_orders * (last_price - comission) / week_index * 100
+                weekly_prices.append({'Week': week_index, 'Price': last_price})
+                max_weekly_gains.append({'Ticker': ticker, 'Week': week_index, 'Price': last_price, "Price / Week": round(last_price / week_index,3), "strike":strike, "Max Weekly Gain": round(last_max_weekly_gain,3), "Maintainace margin": maintainanance_margin_dict[ticker]})
 
-    df_weekly_prices = pd.DataFrame(weekly_prices)
-    print(df_weekly_prices)
+        df_weekly_prices = pd.DataFrame(weekly_prices)
 
 df_max_weekly_gains = pd.DataFrame(max_weekly_gains)
 print(df_max_weekly_gains)
