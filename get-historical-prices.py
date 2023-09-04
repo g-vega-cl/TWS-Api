@@ -11,9 +11,7 @@ maintainanance_margin_dict = {
     "EEM": 880,
     "IWM": 3700,
     "ARKK": 800,
-    "LNG": 3800
-
-    
+    "LNG": 3800,
 }
 
 # rounded up to the nearest dollar, unless really close to current value
@@ -24,7 +22,7 @@ current_prices = {
     "EEM": 41,
     "IWM": 195,
     "ARKK": 45,
-    "LNG": 164
+    "LNG": 167,
 }
 
 def calculate_strike_percent(percent, current_prices):
